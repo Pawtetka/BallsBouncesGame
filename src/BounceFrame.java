@@ -36,13 +36,17 @@ public class BounceFrame extends JFrame {
         buttonPanel.setBackground(Color.lightGray);
         JButton buttonStart = new JButton("Start");
         JButton buttonExperiment = new JButton("Priority experiment");
+        JButton buttonJoin = new JButton("Test join");
         JButton buttonStop = new JButton("Stop");
+
         buttonStart.addActionListener(e -> createBall(randomColor(), Thread.NORM_PRIORITY, true));
         buttonExperiment.addActionListener(e -> doPriorityExperiment());
+        buttonJoin.addActionListener(e -> doJoinExperiment());
         buttonStop.addActionListener(e -> System.exit(0));
 
         buttonPanel.add(buttonStart);
         buttonPanel.add(buttonExperiment);
+        buttonPanel.add(buttonJoin);
         buttonPanel.add(buttonStop);
 
         return buttonPanel;
@@ -65,6 +69,10 @@ public class BounceFrame extends JFrame {
         }
         canvas.addBall(b);
 
+        createThreadForBall(b, priority);
+    }
+
+    private void createThreadForBall(Ball b, int priority){
         BallThread thread = new BallThread(b, priority);
         thread.start();
         System.out.println("Thread name = " +
@@ -76,6 +84,24 @@ public class BounceFrame extends JFrame {
             createBall(Color.BLUE, Thread.MIN_PRIORITY, false);
         }
         createBall(Color.RED, Thread.MAX_PRIORITY, false);
+    }
+
+    private void doJoinExperiment(){
+        Ball b1 = new Ball(canvas, Color.white);
+        Ball b2 = new Ball(canvas, Color.RED);
+        Ball b3 = new Ball(canvas, Color.BLUE);
+
+        canvas.addBall(b1);
+        canvas.addBall(b2);
+        canvas.addBall(b3);
+
+        BallThread thread1 = new BallThread(b1, Thread.NORM_PRIORITY);
+        BallThread thread2 = new BallThread(b2, Thread.NORM_PRIORITY, thread1);
+        BallThread thread3 = new BallThread(b3, Thread.NORM_PRIORITY, thread2);
+
+        thread3.start();
+        thread2.start();
+        thread1.start();
     }
 
     private void createPocketsTextFields(JPanel panel){

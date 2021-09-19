@@ -10,27 +10,22 @@ public class Ball {
     private int y;
     private int dx = 3;
     private int dy = 3;
-    private final Color color;
+    private Color color = Color.WHITE;
 
     public Ball(BallCanvas c){
         this.canvas = c;
-        this.color = Color.WHITE;
 
         x = new Random().nextInt(this.canvas.getWidth());
         y = new Random().nextInt(this.canvas.getHeight());
     }
 
     public Ball(BallCanvas c, Color color){
-        this.canvas = c;
+        this(c);
         this.color = color;
-
-        x = new Random().nextInt(this.canvas.getWidth());
-        y = new Random().nextInt(this.canvas.getHeight());
     }
 
     public Ball(BallCanvas c, Color color, int fixedPos){
-        this.canvas = c;
-        this.color = color;
+        this(c, color);
 
         x = fixedPos;
         y = fixedPos;
