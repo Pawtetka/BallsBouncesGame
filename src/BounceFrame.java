@@ -3,9 +3,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BounceFrame extends JFrame {
-    private BallCanvas canvas;
+    private final BallCanvas canvas;
     public static final int WIDTH = 1500;
     public static final int HEIGHT = 750;
 
@@ -34,11 +35,14 @@ public class BounceFrame extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.lightGray);
         JButton buttonStart = new JButton("Start");
+        JButton buttonExperiment = new JButton("Priority experiment");
         JButton buttonStop = new JButton("Stop");
-        buttonStart.addActionListener(e -> createBall());
+        buttonStart.addActionListener(e -> createBall(randomColor(), Thread.NORM_PRIORITY, true));
+        buttonExperiment.addActionListener(e -> doPriorityExperiment());
         buttonStop.addActionListener(e -> System.exit(0));
 
         buttonPanel.add(buttonStart);
+        buttonPanel.add(buttonExperiment);
         buttonPanel.add(buttonStop);
 
         return buttonPanel;
@@ -52,14 +56,26 @@ public class BounceFrame extends JFrame {
         return labelsPanel;
     }
 
-    private void createBall(){
-        Ball b = new Ball(canvas);
+    private void createBall(Color color, int priority, boolean inRandomPosition){
+        Ball b;
+        if(inRandomPosition){
+            b = new Ball(canvas, color);
+        }else{
+            b = new Ball(canvas, color, canvas.getHeight()/2);
+        }
         canvas.addBall(b);
 
-        BallThread thread = new BallThread(b);
+        BallThread thread = new BallThread(b, priority);
         thread.start();
         System.out.println("Thread name = " +
                 thread.getName());
+    }
+
+    private void doPriorityExperiment(){
+        for(int i = 0; i < 2000; i++){
+            createBall(Color.BLUE, Thread.MIN_PRIORITY, false);
+        }
+        createBall(Color.RED, Thread.MAX_PRIORITY, false);
     }
 
     private void createPocketsTextFields(JPanel panel){
@@ -84,5 +100,13 @@ public class BounceFrame extends JFrame {
     private void createPocket(int x, int y, JTextField field){
         Pocket pocket = new Pocket(x, y, field);
         this.canvas.addPocket(pocket);
+    }
+
+    private Color randomColor(){
+        int r = new Random().nextInt(255);
+        int g = new Random().nextInt(255);
+        int b = new Random().nextInt(255);
+
+        return new Color(r, g, b);
     }
 }

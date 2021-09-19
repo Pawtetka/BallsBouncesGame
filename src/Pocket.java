@@ -25,7 +25,7 @@ public class Pocket {
         return y;
     }
 
-    public void increaseCounter(){
+    public synchronized void increaseCounter(){
         String text = String.valueOf(counter.incrementAndGet());
         counterText.setText(text);
     }

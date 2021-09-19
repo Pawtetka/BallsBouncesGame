@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BallCanvas extends JPanel {
     private ArrayList<Ball> balls = new ArrayList<>();
@@ -14,7 +17,7 @@ public class BallCanvas extends JPanel {
         this.balls.add(b);
     }
 
-    public void removeBall(Ball b){
+    public synchronized void removeBall(Ball b){
         this.balls.remove(b);
         repaint();
     }
@@ -24,9 +27,10 @@ public class BallCanvas extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g){
+    public synchronized void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+
         for (Ball b : balls) {
             b.draw(g2);
         }

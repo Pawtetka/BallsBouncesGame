@@ -1,9 +1,11 @@
 public class BallThread extends Thread{
     private Ball b;
 
-    public BallThread(Ball ball){
+    public BallThread(Ball ball, int priority){
         b = ball;
+        this.setPriority(priority);
     }
+
     @Override
     public void run(){
         try{
@@ -12,12 +14,9 @@ public class BallThread extends Thread{
                 if(b.checkHit()){
                     return;
                 }
-                System.out.println("Thread name = "
-                        + Thread.currentThread().getName());
                 Thread.sleep(5);
             }
         } catch(InterruptedException ignored){
-
         }
     }
 }
