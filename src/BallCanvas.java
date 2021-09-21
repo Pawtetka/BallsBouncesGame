@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BallCanvas extends JPanel {
     private ArrayList<Ball> balls = new ArrayList<>();
